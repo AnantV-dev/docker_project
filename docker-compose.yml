@@ -1,0 +1,73 @@
+version : '2.2'
+
+services:
+  mysql:
+      build:
+         dockerfile: Dockerfile
+         context: ./mysql
+      ports:
+        - "3306:3306"
+  redis:
+      image: redis
+      ports:
+      - "6379:6379"
+  bata:
+      build:
+          dockerfile: Dockerfile
+          context: ./bata
+      environment:
+            - MYSQL_HOST=mysql
+            - MYSQL_USERNAME=root
+            - MYSQL_PASSWORD=root
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+      depends_on:
+            - "mysql"
+            - "redis"
+  tata:
+      build:
+          dockerfile: Dockerfile
+          context: ./tata
+      environment:
+            - MYSQL_HOST=mysql
+            - MYSQL_USERNAME=root
+            - MYSQL_PASSWORD=root
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+      depends_on:
+            - "mysql"
+            - "redis"
+  calc:
+      build:
+          dockerfile: Dockerfile
+          context: ./calcindex
+      environment:
+            - MYSQL_HOST=mysql
+            - MYSQL_USERNAME=root
+            - MYSQL_PASSWORD=root
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+      depends_on:
+            - "mysql"
+            - "bata"
+            - "tata"
+            - "redis"
+  ui:
+      build:
+          dockerfile: Dockerfile
+          context: ./ui
+      environment:
+            - MYSQL_HOST=mysql
+            - MYSQL_USERNAME=root
+            - MYSQL_PASSWORD=root
+            - REDIS_HOST=redis
+            - REDIS_PORT=6379
+      ports:
+        - "5004:5004"
+      depends_on:
+            - "mysql"
+            - "tata"
+            - "bata"
+            - "calc"
+            - "redis"
+

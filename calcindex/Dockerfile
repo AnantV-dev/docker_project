@@ -1,0 +1,12 @@
+FROM python:3
+RUN mkdir /calc
+WORKDIR /calc
+
+COPY requirement.txt requirement.txt
+RUN pip install -r requirement.txt
+
+COPY . .
+LABEL version = "1.0"
+
+#CMD flask run --host=0.0.0.0 --port=5003
+CMD ["./start.sh"]
