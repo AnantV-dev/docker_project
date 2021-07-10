@@ -1,0 +1,6 @@
+#!/bin/bash
+docker cp copy_centos_1:/home/index.html . && docker cp index.html copy_apache_1:/usr/local/apache2/htdocs
+
+#Please create a file inside centos container manually and then execuate this command.
+
+#Here copy_centos_1 is source container and copy_apache_1 is destination command, we are copying the file at current location and then pasting it in destination container.
